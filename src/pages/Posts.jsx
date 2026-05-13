@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../App";
+import { Link } from "react-router-dom";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     async function fetchPosts() {
       setLoading(true);
       const response = await fetch(`${BASE_URL}/posts`);
@@ -13,24 +14,26 @@ function Posts() {
       setPosts(data)
       setLoading(false);
     }
-    
+
     fetchPosts();
-  },[]);
+  }, []);
 
   console.log(posts)
-  
+
   return (
     <>
       <h2>Posts</h2>
       <div>
         {isLoading && <h3>Loading...</h3>}
         <div style={styles.container}>
-          {posts.map((post)=> (
-            <div key={post.id} style={styles.card}>
-              <h3 style={styles.title}>{post.title}</h3>
-              <p style={styles.body}>{post.body}</p>
-              <span style={styles.user}>User ID: {post.userId}</span>
-            </div>
+          {posts.map((post) => (
+            <Link to={`/posts/${post.id}`} key={post.id} style={styles.card}>
+              <div key={post.id} style={styles.card}>
+                <h3 style={styles.title}>{post.title}</h3>
+                <p style={styles.body}>{post.body}</p>
+                <span style={styles.user}>User ID: {post.userId}</span>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -38,7 +41,7 @@ function Posts() {
   )
 }
 
-const styles = { 
+const styles = {
   container: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
